@@ -56,10 +56,10 @@ jobs:
         id: unittest
         if: contains(github.event_name, 'pull_request')
         run: npm run test
+        continue-on-error: true
 
       - name: Create Unit Tests Result Comment
         uses: actions/github-script@v3
-        if: ${{ always() }}
         with:
           github-token: ${{ env.GITHUB_TOKEN }}
           script: |
