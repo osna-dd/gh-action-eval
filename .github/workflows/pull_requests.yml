@@ -7,9 +7,8 @@ on:
     types:
       - synchronize
       - opened
+      - reopended
       - ready_for_review
-    paths:
-      - '/**'
 
 
 env:
