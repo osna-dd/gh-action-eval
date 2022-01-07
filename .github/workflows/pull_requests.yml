@@ -52,9 +52,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
-
       - name: Unit tests
         id: unittest
         if: contains(github.event_name, 'pull_request')
