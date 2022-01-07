@@ -59,6 +59,7 @@ jobs:
 
       - name: Create Unit Tests Result Comment
         uses: actions/github-script@v3
+        if: ${{ always() }}
         with:
           github-token: ${{ env.GITHUB_TOKEN }}
           script: |
