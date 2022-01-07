@@ -55,7 +55,7 @@ jobs:
       - name: Unit tests
         id: unittest
         if: contains(github.event_name, 'pull_request')
-        run: npm run test
+        run: npm run test -- --useStderr
         continue-on-error: true
 
       - name: Create Unit Tests Result Comment
