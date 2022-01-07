@@ -60,7 +60,7 @@ jobs:
 
       - name: Set error-log to var
         uses: actions/github-script@v4
-        if: steps.unittest.outcome != "success"
+        if: steps.unittest.outcome != 'success'
         id: error-log
         with:
           script: |
@@ -70,7 +70,7 @@ jobs:
 
       - name: Create Unit Tests Result Comment
         uses: actions/github-script@v4
-        if: steps.unittest.outcome != "success"
+        if: steps.unittest.outcome != 'success'
         with:
           github-token: ${{ env.GITHUB_TOKEN }}
           script: |
