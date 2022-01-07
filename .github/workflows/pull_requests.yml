@@ -72,6 +72,8 @@ jobs:
             ```
             ${{ steps.unittest.outputs.stdout }}
             ```
+
+            StdErr
             ```
             ${{ steps.unittest.outputs.stderr }}
             ```
