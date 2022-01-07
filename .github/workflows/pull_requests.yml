@@ -76,6 +76,7 @@ jobs:
             #### CDK Unit tests 🤖`${{ steps.unittest.outcome }}`
 
             <details><summary>CDK Unit Tests</summary>
+
             ```
             ${{ steps.error-log.outputs.result}}
             ```
