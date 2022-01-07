@@ -1,0 +1,22 @@
+{
+  "name": "gh-action-eval",
+  "version": "1.0.0",
+  "description": "GitHubアクションの動作確認",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osna-dd/gh-action-eval.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/osna-dd/gh-action-eval/issues"
+  },
+  "homepage": "https://github.com/osna-dd/gh-action-eval#readme",
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}

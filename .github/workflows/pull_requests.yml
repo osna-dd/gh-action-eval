@@ -1,0 +1,90 @@
+name: Node Unit Test
+
+on:
+  pull_request:
+    branches: 
+      - main
+    types:
+      - synchronize
+      - opened
+      - ready_for_review
+    paths:
+      - '/**'
+
+
+env:
+  CDK_WORKDIR: '.'
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  NODE_VERSION: 'lts/fermium'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    defaults:
+      run:
+        working-directory: ${{ env.CDK_WORKDIR }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache node modules
+        # https://docs.github.com/en/actions/advanced-guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name}}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Unit tests
+        id: unittest
+        if: contains(github.event_name, 'pull_request')
+        run: npm run test
+
+      - name: Create Unit Tests Result Comment
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ env.GITHUB_TOKEN }}
+          script: |
+            const output = (function(){
+            /*<<<EOS
+            #### CDK Unit tests 🤖`${{ steps.unittest.outcome }}`
+
+            <details><summary>CDK Unit Tests</summary>
+
+            ```
+            ${{ steps.unittest.outputs.stdout }}
+            ```
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: `${{ github.event_name }}`, Working Directory: `${{ env.CDK_WORKDIR}}`, Workflow: `${{ github.workflow }}`*
+            EOS>>>*/}
+            ).toString().match(/[^]*\/\*<<<EOS\n([^]*)EOS>>>\*\/}$/)[1];
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
