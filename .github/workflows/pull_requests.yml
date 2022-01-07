@@ -56,7 +56,7 @@ jobs:
         id: unittest
         if: contains(github.event_name, 'pull_request')
         run: npm run test 2>test.stderr
-          #continue-on-error: true
+        #continue-on-error: true
 
       - name: Set error-log to var
         uses: actions/github-script@v4
